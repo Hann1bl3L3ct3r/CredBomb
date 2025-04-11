@@ -30,9 +30,41 @@ HTTP/HTTPS Basic Auth Weak Credentials
 
 The framework also allows for easy extension. By simply updating the default_creds.json file, you can extend the default credentials list to include any additional credentials you desire. You can also create new modules based on the existing modules, which can be added to the modules folder and added to the scanner.py script easily. 
 
+
 ```python scanner.py 10.10.10.0/24``` 
+
 
 Sample Output: 
 
 ```
+[
+    {
+        "ip": "10.10.10.15",
+        "vulnerabilities": [
+            {
+                "service": "SSH",
+                "issue": "Default credentials valid",
+                "username": "pi",
+                "password": "pi"
+            }
+        ]
+    },
+    {
+        "ip": "10.10.10.16",
+        "vulnerabilities": [
+            {
+                "service": "FTP",
+                "issue": "Anonymous login allowed"
+            },
+            {
+                "service": "SNMP",
+                "issue": "Responds to default community string",
+                "community": "public",
+                "oid": ".1.3.6.1.2.1.1.1.0",
+                "response": "iso.3.6.1.2.1.1.1.0 = STRING: \"Brother NC-8300w, Firmware Ver.R  ,MID 84U-F06\""
+            }
+        ]
+    }
+]
+
 ```
