@@ -1,0 +1,9 @@
+python-nmap 
+rich 
+paramiko 
+impacket 
+requests 
+ldap3 
+mysql-connector-python 
+psycopg2-binary 
+redis
