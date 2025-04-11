@@ -1,6 +1,6 @@
 # CredBomb
 
-![credbomb](https://github.com/user-attachments/assets/4f1fb58e-bcbd-477e-b467-d5ba1207e218)
+![credbombsmall](https://github.com/user-attachments/assets/750fbf67-0cd4-4395-bbd2-b3786c5ecb42)
 
 Python framework for password spraying weak credentials against multiple protocols and services across an entire network. 
 
