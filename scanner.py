@@ -10,6 +10,7 @@ from modules.ldap import check_ldap
 from modules.mysql import check_mysql
 from modules.postgresql import check_postgresql
 from modules.redis import check_redis
+from modules.vnc import check_vnc
 from rich import print
 import json
 from datetime import datetime
@@ -68,6 +69,10 @@ def main():
             redis_vuln = check_redis(host)
             if redis_vuln:
                 host_result["vulnerabilities"].append(redis_vuln)
+         if 5900 in ports:
+            vnc_vuln = check_vnc(host)
+            if vnc_vuln:
+                host_result["vulnerabilities"].append(vnc_vuln)
         if host_result["vulnerabilities"]:
             results.append(host_result)
     if not os.path.exists("reports"):
