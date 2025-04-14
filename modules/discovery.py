@@ -6,7 +6,7 @@ def scan_subnet(subnet):
     # Scan TCP ports
     scanner.scan(
         hosts=subnet,
-        arguments='-sS -p 21,22,23,80,139,389,443,445,3306,5432,6379,8080,8000,8443,8888 --open'
+        arguments='-sS -p 21,22,23,80,139,389,443,445,3306,5432,5900,6379,8080,8000,8443,8888 --open'
     )
     tcp_hosts = {}
     for host in scanner.all_hosts():
