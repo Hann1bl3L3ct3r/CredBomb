@@ -8,3 +8,4 @@ mysql-connector-python
 psycopg2-binary 
 redis
 vncdotool
+telnetlib3
