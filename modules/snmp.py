@@ -3,16 +3,16 @@ from .utils import load_default_credentials
 
 def check_snmp(ip, timeout=5):
     creds = load_default_credentials("snmp")
-    oid = ".1.3.6.1.2.1.1.1.0"  # SysDescr OID for basic info
+    oid = ".1.3.6.1.2.1.1.1.0"  # SysDescr OID for basic system description
 
     for entry in creds:
         community = entry["community"]
         try:
             result = subprocess.run(
-                ["snmpwalk", "-v2c", "-c", community, ip, oid],
+                ["snmpwalk", "-v2c", "-c", community, "-t", "2", ip, oid],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.DEVNULL,
-                timeout=timeout  # Force process to die if longer than X seconds
+                timeout=timeout  # force subprocess to die after X seconds
             )
             output = result.stdout.decode()
 
@@ -25,8 +25,8 @@ def check_snmp(ip, timeout=5):
                     "response": output.strip()
                 }
         except subprocess.TimeoutExpired:
-            continue  # Skip if snmpwalk hangs
+            continue  # snmpwalk timed out, move to next community or IP
         except Exception:
-            continue
+            continue  # ignore any other snmpwalk errors
 
     return None
