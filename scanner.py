@@ -34,7 +34,7 @@ def scan_service_with_timeout(service_function, *args, timeout=120):
             print(f"[red]Error during {service_function.__name__} for {args[0]}: {e}[/red]")
             return None
 
-def scan_host(host, ports, verbose=False, service_timeout=5):
+def scan_host(host, ports, verbose=False, service_timeout=120):
     host_result = {"ip": host, "vulnerabilities": []}
 
     try:
