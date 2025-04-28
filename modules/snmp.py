@@ -1,7 +1,7 @@
 import subprocess
 from .utils import load_default_credentials
 
-def check_snmp(ip, timeout=5):
+def check_snmp(ip, timeout=10):
     creds = load_default_credentials("snmp")
     oid = ".1.3.6.1.2.1.1.1.0"  # SysDescr OID for basic system description
 
