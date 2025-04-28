@@ -5,14 +5,14 @@ from .utils import load_default_credentials
 # Suppress Paramiko logging output
 logging.getLogger("paramiko").setLevel(logging.CRITICAL)
 
-def check_ssh(ip, port=22, timeout=5):
+def check_ssh(ip, port=22, timeout=10):
     creds = load_default_credentials("ssh")
     client = paramiko.SSHClient()
     client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 
     for entry in creds:
-        username = entry["username"]
-        password = entry["password"]
+        username = entry.get("username", "")
+        password = entry.get("password", "")
 
         try:
             client.connect(
@@ -36,8 +36,11 @@ def check_ssh(ip, port=22, timeout=5):
 
         except paramiko.AuthenticationException:
             continue
+        except (paramiko.SSHException, paramiko.ssh_exception.NoValidConnectionsError):
+            # Connection problem (e.g., no SSH server), break out
+            break
         except Exception:
-            # Suppress all other connection/logging errors silently
+            # Other connection issues (timeouts, socket issues)
             break
 
     return None
