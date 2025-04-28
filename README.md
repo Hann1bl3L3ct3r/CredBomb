@@ -29,11 +29,13 @@ HTTP/HTTPS Basic Auth Weak Credentials
 
 VNC Unauthenticated Access (New as of 4/14/2025) 
 
+NEW: As of 4/28/2025, added detailed IP/service output after discovery scan as well as added the option --verbose to give detailed output of what IP and service is being scanned along with the progress bar. The --service-timeout option was also created with a 120 second default to terminate a scan against a specific service if the total scan time exceeds 120 seconds to prevent hands due to slow network connections or hung server services. 
+
 
 The framework also allows for easy extension. By simply updating the default_creds.json file, you can extend the default credentials list to include any additional credentials you desire. You can also create new modules based on the existing modules, which can be added to the modules folder and added to the scanner.py script easily. 
 
 
-```python scanner.py 10.10.10.0/24``` 
+```python scanner.py 10.10.10.0/24 --service-timeout 120 --verbose``` 
 
 
 Sample Output: 
