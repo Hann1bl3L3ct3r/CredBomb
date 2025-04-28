@@ -1,43 +1,37 @@
 import telnetlib3
 import asyncio
-from .utils import load_default_credentials
 
-async def try_telnet(ip, username, password, timeout=5):
+async def try_telnet(ip, username="admin", password="admin", timeout=5):
     try:
-        reader, writer = await telnetlib3.open_connection(
-            ip, port=23, connect_minwait=0.1, connect_maxwait=timeout
+        reader, writer = await asyncio.wait_for(
+            telnetlib3.open_connection(ip, port=23),
+            timeout=timeout
         )
 
-        await reader.readuntil("login: ")
-        writer.write(username + "\n")
-
-        await reader.readuntil("Password: ")
-        writer.write(password + "\n")
-
-        # Read some output
+        await reader.readuntil("login: ", timeout=timeout)
+        writer.write(username + '\n')
+        await reader.readuntil("Password: ", timeout=timeout)
+        writer.write(password + '\n')
         await asyncio.sleep(1)
-        output = await reader.read(1024)
+
+        data = await reader.read(1024)
         writer.close()
+        await writer.wait_closed()
 
-        if any(token in output.lower() for token in ["$", "#", "last login", "welcome"]):
-            return True
-    except Exception:
-        pass
-    return False
-
-def check_telnet(ip, timeout=5):
-    creds = load_default_credentials("telnet")
-    for entry in creds:
-        username = entry["username"]
-        password = entry["password"]
-
-        result = asyncio.run(try_telnet(ip, username, password, timeout=timeout))
-        if result:
+        if username in data.decode(errors="ignore"):
             return {
                 "service": "Telnet",
-                "issue": "Default credentials valid",
+                "issue": "Default credentials allowed",
                 "username": username,
                 "password": password
             }
+    except Exception:
+        return None
 
     return None
+
+def check_telnet(ip):
+    try:
+        return asyncio.run(try_telnet(ip))
+    except Exception:
+        return None
