@@ -4,43 +4,83 @@
 
 Python framework for password spraying weak credentials against multiple protocols and services across an entire network. 
 
-During many penetration tests and network assessments, looking for weak credentials across an entire network or networks can be a tedioius and time consuming task. CredBomb allows the automation of this task by acting as a framework for automate password sprays. The framework comes with 10 built in protocols and checks including: 
+During many penetration tests and network assessments, looking for weak credentials across an entire network or networks can be a tedious and time consuming task. CredBomb allows the automation of this task by acting as a framework for automated password sprays. The framework comes with 11 built in protocol checks including: 
 
+- SMB Null Sessions & Guest Access
+- Anonymous FTP Access
+- Unauthenticated Redis Access 
+- Anonymous LDAP/LDAPS Binds
+- SNMP Default Community Strings
+- Telnet Default Credentials
+- SSH Default Credentials
+- MySQL Default Credentials
+- PostgreSQL Default Credentials
+- HTTP/HTTPS Basic Auth Default Credentials
+- VNC Unauthenticated Access
 
-SMB Null Sessions
+## Installation
 
-Anonymous FTP Access
+```bash
+pip install -r requirements.txt
+```
 
-Unauthenticated Redis Access 
+Requires `nmap` installed on the system. SYN and UDP scans require root/administrator privileges.
 
-Anonymous LDAP Binds
+## Usage
 
-SNMP Default Community Strings
+```bash
+python scanner.py <subnet> [options]
+```
 
-Telnet Weak Credentials
+### Options
 
-SSH Weak Credentials
+| Flag | Description | Default |
+|------|-------------|---------|
+| `--threads N` | Max concurrent host scans | 10 |
+| `--service-timeout N` | Timeout per service check (seconds) | 120 |
+| `--output / -o FILE` | Custom output file path | `reports/scan_<timestamp>.json` |
+| `--verbose` | Show per-service scan progress | Off |
 
-MySQL Weak Credentials
+### Examples
 
-PostgreSQL Weak Credentials
+```bash
+# Basic scan
+sudo python scanner.py 10.10.10.0/24
 
-HTTP/HTTPS Basic Auth Weak Credentials
+# Fast scan with more threads and custom output
+sudo python scanner.py 10.10.10.0/24 --threads 20 -o results.json
 
-VNC Unauthenticated Access (New as of 4/14/2025) 
+# Verbose scan with shorter timeouts
+sudo python scanner.py 10.10.10.0/24 --verbose --service-timeout 60
+```
 
-NEW: As of 4/28/2025, added detailed IP/service output after discovery scan as well as added the option --verbose to give detailed output of what IP and service is being scanned along with the progress bar. The --service-timeout option was also created with a 120 second default to terminate a scan against a specific service if the total scan time exceeds 120 seconds to prevent hands due to slow network connections or hung server services. 
+## Extending CredBomb
 
+The framework is designed for easy extension:
 
-The framework also allows for easy extension. By simply updating the default_creds.json file, you can extend the default credentials list to include any additional credentials you desire. You can also create new modules based on the existing modules, which can be added to the modules folder and added to the scanner.py script easily. 
+- **Adding credentials**: Update `data/default_creds.json` with additional username/password pairs for any supported service.
+- **Adding new protocols**: Create a new module in the `modules/` folder following the existing module pattern (function that takes an IP, returns a dict or None), then wire it into `scanner.py`.
 
-
-```python scanner.py 10.10.10.0/24 --service-timeout 120 --verbose``` 
-
-
-Sample Output: 
+## Sample Output
 
 ```
+                                 Scan Results Summary                                  
+┏━━━━━━━━━━━━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┓
+┃ Host         ┃ Service ┃ Issue                                ┃ Details            ┃
+┡━━━━━━━━━━━━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━┩
+│ 10.10.10.15  │ SSH     │ Default credentials valid            │ user='pi' pass='pi'│
+├──────────────┼─────────┼──────────────────────────────────────┼────────────────────┤
+│ 10.10.10.16  │ FTP     │ Anonymous login allowed              │ -                  │
+├──────────────┼─────────┼──────────────────────────────────────┼────────────────────┤
+│ 10.10.10.16  │ SNMP    │ Responds to default community string │ community='public' │
+└──────────────┴─────────┴──────────────────────────────────────┴────────────────────┘
+
+Total: 3 finding(s) across 2 host(s)
+```
+
+JSON reports are saved to the `reports/` directory.
+
+```json
 [
     {
         "ip": "10.10.10.15",
@@ -70,5 +110,4 @@ Sample Output:
         ]
     }
 ]
-
 ```

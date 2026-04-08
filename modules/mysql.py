@@ -2,6 +2,7 @@ import mysql.connector
 from mysql.connector import errors
 from .utils import load_default_credentials
 
+
 def check_mysql(ip, port=3306, timeout=5):
     creds = load_default_credentials("mysql")
 
@@ -26,8 +27,12 @@ def check_mysql(ip, port=3306, timeout=5):
                     "password": password
                 }
         except errors.ProgrammingError:
-            continue
+            continue  # Auth failure, try next cred
+        except errors.DatabaseError:
+            continue  # Access denied (error 1045), try next cred
+        except errors.InterfaceError:
+            break  # Connection problem (too many connections, host unreachable)
         except Exception:
-            break  # Server not responding or access denied badly
+            break  # Server not responding
 
     return None

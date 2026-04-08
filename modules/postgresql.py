@@ -2,6 +2,7 @@ import psycopg2
 from psycopg2 import OperationalError
 from .utils import load_default_credentials
 
+
 def check_postgresql(ip, port=5432, timeout=5):
     creds = load_default_credentials("postgresql")
 
@@ -24,9 +25,12 @@ def check_postgresql(ip, port=5432, timeout=5):
                 "username": username,
                 "password": password
             }
-        except OperationalError:
-            continue
+        except OperationalError as e:
+            err_msg = str(e).lower()
+            if "authentication failed" in err_msg or "password" in err_msg:
+                continue  # Auth failure, try next cred
+            break  # Connection-level problem (host unreachable, refused, etc.)
         except Exception:
-            break  # Host may not be responding
+            break
 
     return None
