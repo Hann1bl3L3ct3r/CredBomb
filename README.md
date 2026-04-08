@@ -4,7 +4,7 @@
 
 Python framework for password spraying weak credentials against multiple protocols and services across an entire network. 
 
-During many penetration tests and network assessments, looking for weak credentials across an entire network or networks can be a tedious and time consuming task. CredBomb allows the automation of this task by acting as a framework for automated password sprays. The framework comes with 11 built in protocol checks including: 
+During many penetration tests and network assessments, looking for weak credentials across an entire network or networks can be a tedious and time consuming task. CredBomb allows the automation of this task by acting as a framework for automated password sprays. The framework comes with 17 built in protocol checks including: 
 
 - SMB Null Sessions & Guest Access
 - Anonymous FTP Access
@@ -15,8 +15,14 @@ During many penetration tests and network assessments, looking for weak credenti
 - SSH Default Credentials
 - MySQL Default Credentials
 - PostgreSQL Default Credentials
+- MSSQL Default Credentials
 - HTTP/HTTPS Basic Auth Default Credentials
 - VNC Unauthenticated Access
+- MongoDB Unauthenticated Access
+- Elasticsearch Unauthenticated Access
+- MQTT Unauthenticated Access
+- Memcached Unauthenticated Access
+- Docker API Unauthenticated Access
 
 ## Installation
 

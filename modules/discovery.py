@@ -9,7 +9,7 @@ def scan_subnet(subnet):
     try:
         scanner.scan(
             hosts=subnet,
-            arguments='-sS -p 21,22,23,80,139,389,443,445,636,3306,5432,5900,6379,8080,8000,8443,8888 --open'
+            arguments='-sS -p 21,22,23,80,139,389,443,445,636,1433,1883,2375,3306,5432,5900,6379,8080,8000,8443,8888,9200,11211,27017 --open'
         )
     except nmap.PortScannerError as e:
         err = str(e).lower()

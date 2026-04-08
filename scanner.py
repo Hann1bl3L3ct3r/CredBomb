@@ -20,6 +20,12 @@ from modules.mysql import check_mysql
 from modules.postgresql import check_postgresql
 from modules.redis import check_redis
 from modules.vnc import check_vnc
+from modules.mssql import check_mssql
+from modules.mongodb import check_mongodb
+from modules.elasticsearch import check_elasticsearch
+from modules.mqtt import check_mqtt
+from modules.memcached import check_memcached
+from modules.docker import check_docker
 
 
 def scan_service_with_timeout(service_function, *args, timeout=120):
@@ -62,6 +68,8 @@ def scan_host(host, ports, verbose=False, service_timeout=120):
         ldap_port = 636 if use_ssl else 389
         service_checks.append(("LDAP", check_ldap, [host, ldap_port, use_ssl]))
 
+    if 1433 in ports:
+        service_checks.append(("MSSQL", check_mssql, [host]))
     if 3306 in ports:
         service_checks.append(("MySQL", check_mysql, [host]))
     if 5432 in ports:
@@ -70,6 +78,16 @@ def scan_host(host, ports, verbose=False, service_timeout=120):
         service_checks.append(("Redis", check_redis, [host]))
     if 5900 in ports:
         service_checks.append(("VNC", check_vnc, [host]))
+    if 27017 in ports:
+        service_checks.append(("MongoDB", check_mongodb, [host]))
+    if 9200 in ports:
+        service_checks.append(("Elasticsearch", check_elasticsearch, [host]))
+    if 1883 in ports:
+        service_checks.append(("MQTT", check_mqtt, [host]))
+    if 11211 in ports:
+        service_checks.append(("Memcached", check_memcached, [host]))
+    if 2375 in ports:
+        service_checks.append(("Docker API", check_docker, [host]))
 
     for name, func, args in service_checks:
         try:
@@ -118,8 +136,13 @@ def print_summary(results):
                 details_parts.append(f"community={vuln['community']!r}")
             if "url" in vuln:
                 details_parts.append(vuln["url"])
-            if "port" in vuln and service == "VNC":
+            if "port" in vuln and service in ("VNC", "MQTT", "Memcached"):
                 details_parts.append(f"port={vuln['port']}")
+            if "cluster_name" in vuln:
+                details_parts.append(f"cluster={vuln['cluster_name']}")
+            if "databases" in vuln:
+                dbs = vuln["databases"][:5]
+                details_parts.append(f"dbs={dbs}")
             if "findings" in vuln:
                 for f in vuln["findings"]:
                     details_parts.append(f"{f['type']} (shares: {', '.join(f.get('shares', []))})")

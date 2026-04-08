@@ -46,5 +46,14 @@
         { "username": "admin", "password": "admin" },
         { "username": "user", "password": "user" },
         { "username": "test", "password": "test" }
+    ],
+    "mssql": [
+        { "username": "sa", "password": "" },
+        { "username": "sa", "password": "sa" },
+        { "username": "sa", "password": "password" },
+        { "username": "sa", "password": "Password1" },
+        { "username": "sa", "password": "Password123" },
+        { "username": "admin", "password": "admin" },
+        { "username": "test", "password": "test" }
     ]
 }
