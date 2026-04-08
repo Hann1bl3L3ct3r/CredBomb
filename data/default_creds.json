@@ -1,0 +1,50 @@
+{
+    "telnet": [
+        { "username": "admin", "password": "admin" },
+        { "username": "admin", "password": "password" },
+        { "username": "root", "password": "root" },
+        { "username": "user", "password": "user" },
+        { "username": "cisco", "password": "cisco" },
+        { "username": "admin", "password": "" },
+        { "username": "", "password": "admin" }
+    ],
+    "ssh": [
+        { "username": "root", "password": "root" },
+        { "username": "admin", "password": "admin" },
+        { "username": "admin", "password": "password" },
+        { "username": "user", "password": "user" },
+        { "username": "test", "password": "test" },
+        { "username": "pi", "password": "raspberry" },
+        { "username": "pi", "password": "pi" },
+        { "username": "root", "password": "toor" },
+        { "username": "", "password": "admin" }
+    ],
+    "snmp": [
+        { "community": "public" },
+        { "community": "private" },
+        { "community": "community" }
+    ],
+    "http": [
+        { "username": "admin", "password": "admin" },
+        { "username": "admin", "password": "password" },
+        { "username": "root", "password": "root" },
+        { "username": "user", "password": "user" },
+        { "username": "test", "password": "test" },
+        { "username": "admin", "password": "" },
+        { "username": "", "password": "admin" }
+    ],
+    "mysql": [
+        { "username": "root", "password": "" },
+        { "username": "root", "password": "root" },
+        { "username": "admin", "password": "admin" },
+        { "username": "test", "password": "test" },
+        { "username": "user", "password": "user" }
+    ],
+    "postgresql": [
+        { "username": "postgres", "password": "" },
+        { "username": "postgres", "password": "postgres" },
+        { "username": "admin", "password": "admin" },
+        { "username": "user", "password": "user" },
+        { "username": "test", "password": "test" }
+    ]
+}
