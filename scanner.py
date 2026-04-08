@@ -26,6 +26,14 @@ from modules.elasticsearch import check_elasticsearch
 from modules.mqtt import check_mqtt
 from modules.memcached import check_memcached
 from modules.docker import check_docker
+from modules.ipmi import check_ipmi
+from modules.tftp import check_tftp
+from modules.nfs import check_nfs
+from modules.rtsp import check_rtsp
+from modules.couchdb import check_couchdb
+from modules.cassandra import check_cassandra
+from modules.rabbitmq import check_rabbitmq
+from modules.kubernetes import check_kubernetes
 
 
 def scan_service_with_timeout(service_function, *args, timeout=120):
@@ -88,6 +96,22 @@ def scan_host(host, ports, verbose=False, service_timeout=120):
         service_checks.append(("Memcached", check_memcached, [host]))
     if 2375 in ports:
         service_checks.append(("Docker API", check_docker, [host]))
+    if 623 in ports:
+        service_checks.append(("IPMI", check_ipmi, [host]))
+    if 69 in ports:
+        service_checks.append(("TFTP", check_tftp, [host]))
+    if 2049 in ports:
+        service_checks.append(("NFS", check_nfs, [host]))
+    if 554 in ports:
+        service_checks.append(("RTSP", check_rtsp, [host]))
+    if 5984 in ports:
+        service_checks.append(("CouchDB", check_couchdb, [host]))
+    if 9042 in ports:
+        service_checks.append(("Cassandra", check_cassandra, [host]))
+    if 15672 in ports:
+        service_checks.append(("RabbitMQ", check_rabbitmq, [host]))
+    if 6443 in ports:
+        service_checks.append(("Kubernetes API", check_kubernetes, [host]))
 
     for name, func, args in service_checks:
         try:
@@ -136,13 +160,25 @@ def print_summary(results):
                 details_parts.append(f"community={vuln['community']!r}")
             if "url" in vuln:
                 details_parts.append(vuln["url"])
-            if "port" in vuln and service in ("VNC", "MQTT", "Memcached"):
+            if "port" in vuln and service in ("VNC", "MQTT", "Memcached", "IPMI", "TFTP", "RTSP", "Cassandra", "CouchDB", "RabbitMQ", "Kubernetes API"):
                 details_parts.append(f"port={vuln['port']}")
             if "cluster_name" in vuln:
                 details_parts.append(f"cluster={vuln['cluster_name']}")
             if "databases" in vuln:
                 dbs = vuln["databases"][:5]
                 details_parts.append(f"dbs={dbs}")
+            if "version" in vuln:
+                details_parts.append(f"ver={vuln['version']}")
+            if "readable_file" in vuln:
+                details_parts.append(f"file={vuln['readable_file']}")
+            if "exports" in vuln:
+                details_parts.append(f"exports={vuln.get('world_accessible', vuln['exports'][:3])}")
+            if "cipher_zero" in vuln:
+                details_parts.append("cipher_zero=true")
+            if "namespaces" in vuln:
+                details_parts.append(f"ns={vuln['namespaces'][:5]}")
+            if "queues" in vuln:
+                details_parts.append(f"queues={vuln['queues'][:5]}")
             if "findings" in vuln:
                 for f in vuln["findings"]:
                     details_parts.append(f"{f['type']} (shares: {', '.join(f.get('shares', []))})")

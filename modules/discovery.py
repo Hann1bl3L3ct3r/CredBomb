@@ -9,7 +9,7 @@ def scan_subnet(subnet):
     try:
         scanner.scan(
             hosts=subnet,
-            arguments='-sS -p 21,22,23,80,139,389,443,445,636,1433,1883,2375,3306,5432,5900,6379,8080,8000,8443,8888,9200,11211,27017 --open'
+            arguments='-sS -p 21,22,23,80,139,389,443,445,554,636,1433,1883,2049,2375,3306,5432,5900,5984,6379,6443,8080,8000,8443,8888,9042,9200,11211,15672,27017 --open'
         )
     except nmap.PortScannerError as e:
         err = str(e).lower()
@@ -34,18 +34,19 @@ def scan_subnet(subnet):
         udp_scanner = nmap.PortScanner()
         udp_scanner.scan(
             hosts=subnet,
-            arguments='-sU -p 161 --open'
+            arguments='-sU -p 69,161,623 --open'
         )
         for host in udp_scanner.all_hosts():
             if host not in tcp_hosts:
                 tcp_hosts[host] = []
             for proto in udp_scanner[host].all_protocols():
-                if proto == 'udp' and 161 in udp_scanner[host][proto]:
-                    tcp_hosts[host].append(161)
+                if proto == 'udp':
+                    for udp_port in udp_scanner[host][proto].keys():
+                        tcp_hosts[host].append(udp_port)
     except nmap.PortScannerError as e:
         err = str(e).lower()
         if "requires root" in err or "permission" in err or "elevated" in err:
-            print(f"[!] UDP scan requires root/administrator privileges. Skipping SNMP discovery.", file=sys.stderr)
+            print(f"[!] UDP scan requires root/administrator privileges. Skipping SNMP/TFTP/IPMI discovery.", file=sys.stderr)
         else:
             print(f"[!] Nmap UDP scan failed: {e}", file=sys.stderr)
 

@@ -55,5 +55,20 @@
         { "username": "sa", "password": "Password123" },
         { "username": "admin", "password": "admin" },
         { "username": "test", "password": "test" }
+    ],
+    "rabbitmq": [
+        { "username": "guest", "password": "guest" },
+        { "username": "admin", "password": "admin" },
+        { "username": "rabbitmq", "password": "rabbitmq" },
+        { "username": "admin", "password": "password" }
+    ],
+    "rtsp": [
+        { "username": "admin", "password": "admin" },
+        { "username": "admin", "password": "" },
+        { "username": "admin", "password": "12345" },
+        { "username": "admin", "password": "password" },
+        { "username": "root", "password": "root" },
+        { "username": "root", "password": "" },
+        { "username": "user", "password": "user" }
     ]
 }

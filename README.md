@@ -4,25 +4,40 @@
 
 Python framework for password spraying weak credentials against multiple protocols and services across an entire network. 
 
-During many penetration tests and network assessments, looking for weak credentials across an entire network or networks can be a tedious and time consuming task. CredBomb allows the automation of this task by acting as a framework for automated password sprays. The framework comes with 17 built in protocol checks including: 
+During many penetration tests and network assessments, looking for weak credentials across an entire network or networks can be a tedious and time consuming task. CredBomb allows the automation of this task by acting as a framework for automated password sprays. The framework comes with 25 built in protocol checks including: 
 
+**Authentication & Remote Access**
 - SMB Null Sessions & Guest Access
-- Anonymous FTP Access
-- Unauthenticated Redis Access 
-- Anonymous LDAP/LDAPS Binds
-- SNMP Default Community Strings
-- Telnet Default Credentials
 - SSH Default Credentials
+- Telnet Default Credentials
+- VNC Unauthenticated Access
+- RDP/IPMI Cipher Zero Detection
+- RTSP Unauthenticated/Default Credential Stream Access
+
+**Web & API Services**
+- HTTP/HTTPS Basic Auth Default Credentials
+- Elasticsearch Unauthenticated Access
+- CouchDB Unauthenticated Access
+- Docker API Unauthenticated Access
+- Kubernetes API Unauthenticated Access
+- RabbitMQ Management Default Credentials
+
+**Databases**
 - MySQL Default Credentials
 - PostgreSQL Default Credentials
 - MSSQL Default Credentials
-- HTTP/HTTPS Basic Auth Default Credentials
-- VNC Unauthenticated Access
 - MongoDB Unauthenticated Access
-- Elasticsearch Unauthenticated Access
-- MQTT Unauthenticated Access
+- Redis Unauthenticated Access
+- Cassandra Unauthenticated Access
 - Memcached Unauthenticated Access
-- Docker API Unauthenticated Access
+
+**Network Services**
+- Anonymous FTP Access
+- Anonymous LDAP/LDAPS Binds
+- SNMP Default Community Strings
+- MQTT Unauthenticated Broker Access
+- TFTP Unauthenticated File Read
+- NFS World-Accessible Exports
 
 ## Installation
 
